@@ -11,8 +11,9 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   "org.scalikejdbc" %% "scalikejdbc"       % "2.4.2",
-  "com.h2database"  %  "h2"                % "1.4.192",
-  "ch.qos.logback"  %  "logback-classic"   % "1.1.7",
+  "org.scalikejdbc" %% "scalikejdbc"                  % "2.4.2",
+  "org.scalikejdbc" %% "scalikejdbc-config"           % "2.4.2",
+  "org.scalikejdbc" %% "scalikejdbc-play-initializer" % "2.5.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
   "org.flywaydb" %% "flyway-play" % "3.0.1",
   "mysql" % "mysql-connector-java" % "6.0.4"
