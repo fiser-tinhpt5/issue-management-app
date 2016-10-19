@@ -1,5 +1,6 @@
 package models
 
+import scalikejdbc.{ AutoSession, DBSession }
 import scalikejdbc.config.DBs
 
 import scala.util.Try
@@ -9,5 +10,5 @@ import scala.util.Try
  */
 abstract class AbstractDAO[T] {
   DBs.setupAll()
-  def list: List[T]
+  def list(implicit session: DBSession = AutoSession): Try[List[T]]
 }

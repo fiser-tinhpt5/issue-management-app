@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2.2" % "test",
   "org.flywaydb" %% "flyway-play" % "3.0.1",
   "mysql" % "mysql-connector-java" % "5.1.38",
+  "org.flywaydb" %% "flyway-play" % "3.0.1",
   specs2 % Test
 )
 
