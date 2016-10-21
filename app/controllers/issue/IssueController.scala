@@ -15,7 +15,7 @@ class IssueController @Inject() (issueDAO: IssueDAO) extends Controller {
 
   def list = Action {
     issueDAO.list match {
-      case Success(issues) => Ok(views.html.main.render("List of user", views.html.issue.issue.render(issues)))
+      case Success(issues) => Ok(views.html.main.render("List of issues", views.html.issue.issue.render(issues)))
       case Failure(e)      => InternalServerError(views.html.main.render("Error", views.html.error.render(e)))
     }
   }

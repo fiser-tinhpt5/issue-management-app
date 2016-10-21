@@ -9,6 +9,5 @@ import scala.util.Try
  * Created by septechuser on 11/10/2016.
  */
 abstract class AbstractDAO[T] {
-  DBs.setupAll()
-  def list(implicit session: DBSession = AutoSession): Try[List[T]]
+  def list(implicit session: DBSession): Try[List[T]]
 }
