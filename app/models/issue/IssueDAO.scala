@@ -6,7 +6,7 @@ import models.AbstractDAO
 import models.issue.Status._
 import scalikejdbc._
 
-import scala.util.Try
+import scala.util.{ Failure, Success, Try }
 
 /**
  * Created by septechuser on 11/10/2016.
@@ -17,10 +17,8 @@ class IssueDAO extends AbstractDAO[Issue] {
       sql"select * from issue".
         map(rs =>
           Issue(rs.int("id"), rs.string("issue"), rs.string("challenge"), rs.date("raised_date"),
-            rs.string("status") match {
-              case "NOT YET" => NOT_YET
-              case "DONE"    => DONE
-              case "DOING"   => DOING
+            Status.fromString(rs.string("status")) match {
+              case Success(status) => status
             }))
         .list().apply()
     }
