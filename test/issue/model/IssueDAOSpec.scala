@@ -6,6 +6,7 @@ import org.scalatest.junit.JUnitRunner
 import play.api.test.PlaySpecification
 import scalikejdbc.specs2.mutable.AutoRollback
 import scalikejdbc._
+import setting.DBTestSetting
 /**
  * Created by septechuser on 13/10/2016.
  */

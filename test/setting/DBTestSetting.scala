@@ -1,4 +1,4 @@
-package issue.model
+package setting
 
 import scalikejdbc.ConnectionPool
 

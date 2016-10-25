@@ -4,7 +4,7 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(implicit session: Session)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +16,26 @@
     <body>
         @* And here's where we render the `Html` object containing
          * the page content. *@
-        @content
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav navbar-nav navbar-right">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            @session.get("email") match {
+                                case Some(email) => {
+                                    <label>Hello @email</label>
+                                    <button type="button" class="btn btn-default" onclick="window.location.href='/logout'">Logout</button>
+                                }
+                                case None => {<button type="button" class="btn btn-default" onclick="window.location.href='/login'">Login</button>}
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            @content
+        </div>
     </body>
 </html>

@@ -23,4 +23,12 @@ class IssueDAO extends AbstractDAO[Issue] {
         .list().apply()
     }
   }
+
+  override def save(issue: Issue)(implicit session: DBSession = AutoSession): Try[Int] = {
+    Try {
+      sql"""insert into issue(issue, challenge, raised_date, status)
+           values(${issue.issue}, ${issue.challenge}, ${issue.raisedDate}, ${issue.status.status})"""
+        .update().apply()
+    }
+  }
 }

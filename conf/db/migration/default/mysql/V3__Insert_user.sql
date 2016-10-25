@@ -1,0 +1,1 @@
+INSERT INTO `user` (`name`, `email`, `password`) VALUES ('Tinh', 'tinh_pt@septeni-technology.jp', '123');
