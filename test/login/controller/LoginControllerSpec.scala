@@ -1,7 +1,7 @@
-package user.controller
+package login.controller
 
-import controllers.user.UserController
-import models.user.{ User, UserDAO }
+import controllers.login.LoginController
+import models.user.{ Password, User, UserDAO }
 import org.specs2.mock.Mockito
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
 
@@ -10,15 +10,16 @@ import scala.util.{ Failure, Success, Try }
 /**
  * Created by septechuser on 25/10/2016.
  */
-class UserControllerSpec extends PlaySpecification with Mockito {
+class LoginControllerSpec extends PlaySpecification with Mockito {
 
   val mockUserDAO = mock[UserDAO]
 
-  def userControllerWithMock(userDAO: UserDAO) = new UserController(mockUserDAO)
+  def userControllerWithMock(userDAO: UserDAO) = new LoginController(mockUserDAO)
 
-  val dummyUser = User(1, "Tinh", "tinh_pt@septeni-technology", "1234")
+  val dummyPassword = "1234"
+  val dummyUser = User(1, "Tinh", "tinh_pt@septeni-technology", "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4")
 
-  "UserController " should {
+  "LoginController " should {
     "login " should {
       "redirect to login screen" in new WithApplication() {
         val apiResult = call(
@@ -45,10 +46,10 @@ class UserControllerSpec extends PlaySpecification with Mockito {
 
     "authenticate" should {
       "return email of user as authentication key of session when login success" in new WithApplication() {
-        mockUserDAO.authenticate(dummyUser.email, dummyUser.password) returns Try(Some(dummyUser))
+        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Try(Some(dummyUser))
         val apiResult = call(
           userControllerWithMock(mockUserDAO).authenticate,
-          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> dummyUser.email, "password" -> dummyUser.password)
+          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> dummyUser.email, "password" -> dummyPassword)
         )
 
         status(apiResult) mustEqual 303
@@ -56,10 +57,10 @@ class UserControllerSpec extends PlaySpecification with Mockito {
       }
 
       "return bad request if bindFormRequest has error " in new WithApplication() {
-        mockUserDAO.authenticate(dummyUser.email, dummyUser.password) returns Try(Some(dummyUser))
+        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Try(Some(dummyUser))
         val apiResult = call(
           userControllerWithMock(mockUserDAO).authenticate,
-          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("emailUser" -> dummyUser.email, "passwordUser" -> dummyUser.password)
+          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("emailUser" -> dummyUser.email, "passwordUser" -> dummyPassword)
         )
 
         status(apiResult) mustEqual 400
@@ -80,10 +81,10 @@ class UserControllerSpec extends PlaySpecification with Mockito {
       }
 
       "return error 500 when authenticating fail" in new WithApplication() {
-        mockUserDAO.authenticate(dummyUser.email, dummyUser.password) returns Failure(new Throwable)
+        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Failure(new Throwable)
         val apiResult = call(
           userControllerWithMock(mockUserDAO).authenticate,
-          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> dummyUser.email, "password" -> dummyUser.password)
+          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> dummyUser.email, "password" -> dummyPassword)
         )
 
         status(apiResult) mustEqual 500

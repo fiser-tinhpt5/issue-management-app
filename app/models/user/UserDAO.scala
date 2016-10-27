@@ -10,7 +10,8 @@ import scala.util.Try
 class UserDAO {
   def authenticate(email: String, password: String)(implicit session: DBSession = AutoSession): Try[Option[User]] =
     Try {
-      sql"select * from user where email = ${email} and password = ${password}"
+      val encryptPassword = Password.encrypt(password)
+      sql"select * from user where email = ${email} and password = ${encryptPassword}"
         .map(rs => User(rs.int("id"), rs.string("name"), rs.string("email"), rs.string("password")))
         .single().apply()
     }

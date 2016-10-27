@@ -20,11 +20,11 @@ class IssueDAOSpec extends PlaySpecification with DBTestSetting {
   "IssueDAO.list" should {
     "return all issue list " in new AutoRollback {
       sql"""INSERT INTO issue(issue, raised_date, challenge, status)
-      VALUES ('Write some code handing error in controller', '2016-10-18', 'Dont understand how to handle error', 'DOING')"""
+      VALUES ('Write some code handing error in controller', '2016-10-18', 'Dont understand how to handle error', 'DONE')"""
         .update().apply()
       val issues = issueDAO.list.get
       issues must haveSize(1)
-      issues.head.status.status must beEqualTo("DOING")
+      issues.head.status.status must beEqualTo("DONE")
       issues.head.issue must beEqualTo("Write some code handing error in controller")
       issues.head.challenge must beEqualTo("Dont understand how to handle error")
     }

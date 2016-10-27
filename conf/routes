@@ -2,8 +2,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /issues                     controllers.issue.IssueController.list
 
-POST    /authenticate               controllers.user.UserController.authenticate
+POST    /authenticate               controllers.login.LoginController.authenticate
 
-GET     /login                      controllers.user.UserController.login
+GET     /login                      controllers.login.LoginController.login
 
-GET     /logout                     controllers.user.UserController.logout
+GET     /logout                     controllers.login.LoginController.logout

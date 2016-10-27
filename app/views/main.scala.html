@@ -16,17 +16,19 @@
     <body>
         @* And here's where we render the `Html` object containing
          * the page content. *@
-        <nav class="navbar">
+        <nav class="navbar" id="header">
             <div class="container">
                 <div class="nav navbar-nav navbar-right">
                     <form class="form-inline">
                         <div class="form-group">
                             @session.get("email") match {
                                 case Some(email) => {
-                                    <label>Hello @email</label>
-                                    <button type="button" class="btn btn-default" onclick="window.location.href='/logout'">Logout</button>
+                                    <div style="margin-top: 7px">
+                                        <label>Hello @email</label>
+                                        <button type="button" class="btn btn-default" onclick="window.location.href='/logout'">Logout</button>
+                                    </div>
                                 }
-                                case None => {<button type="button" class="btn btn-default" onclick="window.location.href='/login'">Login</button>}
+                                case None => {<button type="button" style="margin-top: 7px;" class="btn btn-default" onclick="window.location.href='/login'">Login</button>}
                             }
                         </div>
                     </form>
@@ -34,8 +36,13 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container" style="margin-top: 200px">
             @content
         </div>
     </body>
+    <style>
+        #header {
+            background-color: #4cae4c;
+        }
+    </style>
 </html>

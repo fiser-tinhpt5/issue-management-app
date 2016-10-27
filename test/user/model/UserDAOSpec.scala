@@ -17,9 +17,10 @@ class UserDAOSpec extends PlaySpecification with DBTestSetting {
   val name = "Tinh"
   val email = "tinh_pt@septeni-technology"
   val password = "1234"
+  val encryptPassword = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"
   trait AutoRollbackFeature extends AutoRollback {
     sql"""
-       insert into user(`name`,`email`,`password`) values(${name},${email},${password})
+       insert into user(`name`,`email`,`password`) values(${name},${email},${encryptPassword})
       """.update().apply()
   }
 
@@ -30,7 +31,7 @@ class UserDAOSpec extends PlaySpecification with DBTestSetting {
           case Success(Some(user)) => {
             user.name must beEqualTo(name)
             user.email must beEqualTo(email)
-            user.password must beEqualTo(password)
+            user.password must beEqualTo(encryptPassword)
           }
         }
       }

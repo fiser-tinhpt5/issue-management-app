@@ -2,10 +2,10 @@
 @(issues: List[Issue])(implicit session: Session)
 
 @main("List of Issues"){
-    <h3>List of Issues</h3>
+    <div class="container">
       <div class="table-responsive">
         <table class="table table-hover table-bordered">
-          <thead>
+          <thead id="table-header">
             <tr>
               <td>No</td>
               <td>Issue</td>
@@ -32,4 +32,11 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+  <style>
+    #table-header {
+      background-color: #adadad;
+    }
+  </style>
 }

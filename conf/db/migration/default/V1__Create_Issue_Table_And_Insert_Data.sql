@@ -8,11 +8,5 @@ CREATE TABLE `issue` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8;
+INSERT INTO `issue` (`issue`, `raised_date`, `challenge`, `status`) VALUES ('write test code for models', '2016-10-15', 'Know nothing', 'DONE');
+INSERT INTO `issue` (`issue`, `raised_date`, `challenge`, `status`) VALUES ('write test code for controller', '2016-10-16', 'Khow nothing', 'DONE');

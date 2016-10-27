@@ -1,8 +1,9 @@
-package controllers.user
+package controllers.login
 
 import javax.inject.{ Inject, Singleton }
 
 import controllers.Secured
+import controllers.forms.LoginForm
 import models.issue.Issue
 import models.user.{ User, UserDAO }
 import play.api.data.Form
@@ -15,17 +16,17 @@ import scala.util.{ Failure, Success }
  * Created by septechuser on 24/10/2016.
  */
 @Singleton
-class UserController @Inject() (userDAO: UserDAO) extends Controller with Secured {
+class LoginController @Inject() (userDAO: UserDAO) extends Controller with Secured {
 
-  val loginForm: Form[User] = Form(
+  val loginForm: Form[LoginForm] = Form(
     mapping(
-      "email" -> nonEmptyText,
+      "email" -> text.verifying("Invalid email format", { !_.matches("""(?=[^\s]+)(?=(\w+)@([\w\.]+))""".r.toString()) }),
       "password" -> nonEmptyText
-    )(User.fromFormValue)(User.toFormValue)
+    )(LoginForm.apply)(LoginForm.unapply)
   )
 
   def login = Action { implicit request =>
-    Ok(views.html.user.login.apply).withNewSession
+    Ok(views.html.user.login("")).withNewSession
   }
 
   def logout = IsAuthenticated { email => implicit request =>
@@ -38,7 +39,7 @@ class UserController @Inject() (userDAO: UserDAO) extends Controller with Secure
       login => userDAO.authenticate(login.email, login.password) match {
         case Success(optionUser) => optionUser match {
           case Some(user) => Redirect("/issues").withSession("email" -> user.email)
-          case None       => BadRequest("Invalid email or password")
+          case None       => BadRequest(views.html.user.login("Invalid email or password"))
         }
         case Failure(e) => InternalServerError(views.html.error(e))
       }
