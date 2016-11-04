@@ -7,3 +7,7 @@ POST    /authenticate               controllers.login.LoginController.authentica
 GET     /login                      controllers.login.LoginController.login
 
 GET     /logout                     controllers.login.LoginController.logout
+
+POST    /issues                     controllers.issue.IssueController.createIssue
+
+GET     /issues/create              controllers.issue.IssueController.createIssueForm

@@ -1,6 +1,7 @@
 package login.controller
 
 import controllers.login.LoginController
+import models.exception.EntityNotFound
 import models.user.{ Password, User, UserDAO }
 import org.specs2.mock.Mockito
 import play.api.test.{ FakeRequest, PlaySpecification, WithApplication }
@@ -46,7 +47,7 @@ class LoginControllerSpec extends PlaySpecification with Mockito {
 
     "authenticate" should {
       "return email of user as authentication key of session when login success" in new WithApplication() {
-        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Try(Some(dummyUser))
+        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Success(dummyUser)
         val apiResult = call(
           userControllerWithMock(mockUserDAO).authenticate,
           FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> dummyUser.email, "password" -> dummyPassword)
@@ -57,7 +58,7 @@ class LoginControllerSpec extends PlaySpecification with Mockito {
       }
 
       "return bad request if bindFormRequest has error " in new WithApplication() {
-        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Try(Some(dummyUser))
+        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Success(dummyUser)
         val apiResult = call(
           userControllerWithMock(mockUserDAO).authenticate,
           FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("emailUser" -> dummyUser.email, "passwordUser" -> dummyPassword)
@@ -70,24 +71,13 @@ class LoginControllerSpec extends PlaySpecification with Mockito {
       "return bad request if email or password is error" in new WithApplication() {
         val email = "abc@123.123"
         val password = "12"
-        mockUserDAO.authenticate(email, password) returns Try(None)
+        mockUserDAO.authenticate(email, password) returns Failure(new EntityNotFound("Entity not found"))
         val apiResult = call(
           userControllerWithMock(mockUserDAO).authenticate,
           FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> email, "password" -> password)
         )
 
         status(apiResult) mustEqual 400
-        session(apiResult).get("email") must beEqualTo(None)
-      }
-
-      "return error 500 when authenticating fail" in new WithApplication() {
-        mockUserDAO.authenticate(dummyUser.email, dummyPassword) returns Failure(new Throwable)
-        val apiResult = call(
-          userControllerWithMock(mockUserDAO).authenticate,
-          FakeRequest(POST, "/authenticate").withFormUrlEncodedBody("email" -> dummyUser.email, "password" -> dummyPassword)
-        )
-
-        status(apiResult) mustEqual 500
         session(apiResult).get("email") must beEqualTo(None)
       }
     }

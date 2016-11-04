@@ -1,6 +1,8 @@
 package issue.model
 
-import models.issue.IssueDAO
+import java.util.Date
+
+import models.issue.{ Issue, IssueDAO, Status }
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import play.api.test.PlaySpecification
@@ -35,5 +37,14 @@ class IssueDAOSpec extends PlaySpecification with DBTestSetting {
     }
   }
 
+  "IssueDAO.save" should {
+    "return genereated key " in new AutoRollback {
+      val dummyIssue = Issue(0, "Write some code handing error in controller", "Dont understand how to handle error",
+        new Date(), Status.NOT_YET)
+      val generatedKey = issueDAO.save(dummyIssue)
+
+      generatedKey.get.toInt should be > 0
+    }
+  }
 }
 

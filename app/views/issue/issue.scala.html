@@ -1,42 +1,37 @@
 @import models.issue.Issue
-@(issues: List[Issue])(implicit session: Session)
+@(issues: List[Issue], messages: String)(implicit session: Session)
 
-@main("List of Issues"){
-    <div class="container">
-      <div class="table-responsive">
+@main("List of Issues") {
+    <h3>List of Issues</h3>
+    <div class="table-responsive">
         <table class="table table-hover table-bordered">
-          <thead id="table-header">
-            <tr>
-              <td>No</td>
-              <td>Issue</td>
-              <td>Challenge</td>
-              <td>Raised Date</td>
-              <td>Status</td>
-            </tr>
-          </thead>
-          <tbody>
-          @for(issue <- issues) {
-            <tr id="@issue.id">
-              <td>@issue.id</td>
-              <td>@issue.issue</td>
-              <td>@issue.challenge</td>
-              <td>@issue.raisedDate</td>
-              <td>@issue.status.status</td>
-            </tr>
-          }
-          @if(issues.length == 0) {
-            <tr>
-              <td colspan="5">No issue</td>
-            </tr>
-          }
-          </tbody>
+            <thead id="table-header">
+                <tr>
+                    <td>No</td>
+                    <td>Issue</td>
+                    <td>Challenge</td>
+                    <td>Raised Date</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                @for(issue <- issues) {
+                    <tr id="@issue.id">
+                        <td>@issue.id</td>
+                        <td>@issue.issue</td>
+                        <td>@issue.challenge</td>
+                        <td>@issue.raisedDate</td>
+                        <td>@issue.status.status</td>
+                    </tr>
+                }
+                @if(issues.length == 0) {
+                    <tr>
+                        <td colspan="5">No issue</td>
+                    </tr>
+                }
+            </tbody>
         </table>
-      </div>
     </div>
 
-  <style>
-    #table-header {
-      background-color: #adadad;
-    }
-  </style>
+    <a href="/issues/create" class="btn btn-primary">Create new issue</a>
 }

@@ -1,12 +1,13 @@
 package user.model
 
+import models.exception.EntityNotFound
 import models.user.{ User, UserDAO }
 import play.api.test.PlaySpecification
 import setting.DBTestSetting
 import scalikejdbc._
 import scalikejdbc.specs2.AutoRollback
 
-import scala.util.Success
+import scala.util.{ Failure, Success }
 
 /**
  * Created by septechuser on 25/10/2016.
@@ -27,26 +28,23 @@ class UserDAOSpec extends PlaySpecification with DBTestSetting {
   "UserDAO " should {
     "authenticate(email: String, password: String) " should {
       "return user if email and password are correct" in new AutoRollbackFeature {
-        userDAO.authenticate(email, password) match {
-          case Success(Some(user)) => {
-            user.name must beEqualTo(name)
-            user.email must beEqualTo(email)
-            user.password must beEqualTo(encryptPassword)
-          }
-        }
+        val user = userDAO.authenticate(email, password).get
+        user.name must beEqualTo(name)
+        user.email must beEqualTo(email)
+        user.password must beEqualTo(encryptPassword)
       }
+    }
 
-      "return none if password is same but email is different" in new AutoRollbackFeature {
-        userDAO.authenticate("abcde@123.com", password) must beEqualTo(Success(None))
-      }
+    "return none if password is same but email is different" in new AutoRollbackFeature {
+      userDAO.authenticate("abcde@123.com", password) must beEqualTo(Failure(EntityNotFound("Entity not found")))
+    }
 
-      "return none if email is same but password is different" in new AutoRollbackFeature {
-        userDAO.authenticate(email, "123") must beEqualTo(Success(None))
-      }
+    "return none if email is same but password is different" in new AutoRollbackFeature {
+      userDAO.authenticate(email, "123") must beEqualTo(Failure(EntityNotFound("Entity not found")))
+    }
 
-      "return none if email and password are different" in new AutoRollbackFeature {
-        userDAO.authenticate("abcde@123.com", "123") must beEqualTo(Success(None))
-      }
+    "return none if email and password are different" in new AutoRollbackFeature {
+      userDAO.authenticate("abcde@123.com", "123") must beEqualTo(Failure(EntityNotFound("Entity not found")))
     }
   }
 }

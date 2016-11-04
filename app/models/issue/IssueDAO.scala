@@ -17,10 +17,16 @@ class IssueDAO extends AbstractDAO[Issue] {
       sql"select * from issue".
         map(rs =>
           Issue(rs.int("id"), rs.string("issue"), rs.string("challenge"), rs.date("raised_date"),
-            Status.fromString(rs.string("status")) match {
-              case Success(status) => status
-            }))
+            Status.fromString(rs.string("status")).map(status => status).get))
         .list().apply()
+    }
+  }
+
+  override def save(t: Issue)(implicit session: DBSession = AutoSession): Try[Long] = {
+    Try {
+      sql"""insert into issue(issue, challenge, raised_date, status)
+           values(${t.issue}, ${t.challenge}, ${t.raisedDate}, ${t.status.status})"""
+        .updateAndReturnGeneratedKey().apply()
     }
   }
 }

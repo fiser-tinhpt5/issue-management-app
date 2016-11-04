@@ -12,6 +12,7 @@
         @* Here's where we render the page title `String`. *@
         <title>@title</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/style.css")">
     </head>
     <body>
         @* And here's where we render the `Html` object containing
@@ -40,9 +41,4 @@
             @content
         </div>
     </body>
-    <style>
-        #header {
-            background-color: #4cae4c;
-        }
-    </style>
 </html>

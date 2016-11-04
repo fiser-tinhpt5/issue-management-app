@@ -10,4 +10,5 @@ import scala.util.Try
  */
 abstract class AbstractDAO[T] {
   def list(implicit session: DBSession): Try[List[T]]
+  def save(t: T)(implicit session: DBSession): Try[Long]
 }
